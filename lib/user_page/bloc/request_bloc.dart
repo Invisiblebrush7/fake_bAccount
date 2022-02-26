@@ -22,7 +22,7 @@ class RequestBloc extends Bloc<RequestEvent, RequestState> {
 
   Future _getData() async {
     final String url =
-        "https://api.sheety.co/d89b0f60f5a721cba13b0538b7530c40/dummyApi/cuentas";
+        "https://api.sheety.co/979fda11b7e210c933987d2d6e7c4e0f/tarea4/hoja1";
     Uri uri = Uri.parse(url);
     http.Response response = await http.get(uri);
 

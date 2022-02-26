@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,8 +23,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   Uint8List? image;
   ScreenshotController screenshotController = ScreenshotController();
-
-  Future _captureAndShare() async {}
 
   void captureSS() async {
     await screenshotController.capture().then((Uint8List? image) async {
@@ -49,12 +48,17 @@ class _ProfileState extends State<Profile> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-              tooltip: "Compartir pantalla",
-              onPressed: () async {
-                captureSS();
-              },
-              icon: Icon(Icons.share),
+            DescribedFeatureOverlay(
+              featureId: 'Share ID',
+              tapTarget: Icon(Icons.share),
+              title: Text("Toma una captura de Pantalla y compártela"),
+              child: IconButton(
+                tooltip: "Compartir pantalla",
+                onPressed: () async {
+                  captureSS();
+                },
+                icon: Icon(Icons.share),
+              ),
             ),
           ],
         ),
@@ -117,26 +121,53 @@ class _ProfileState extends State<Profile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CircularButton(
-                      textAction: "Ver tarjeta",
-                      iconData: Icons.credit_card,
-                      bgColor: Color(0xff123b5e),
-                      action: null,
+                    DescribedFeatureOverlay(
+                      contentLocation: ContentLocation.above,
+                      overflowMode: OverflowMode.extendBackground,
+                      title: Text("Conoce los datos de tu tarjeta"),
+                      featureId: 'Ver tarjeta ID',
+                      tapTarget: Icon(Icons.credit_card),
+                      child: CircularButton(
+                        textAction: "Ver tarjeta",
+                        iconData: Icons.credit_card,
+                        bgColor: Color(0xff123b5e),
+                        action: null,
+                      ),
                     ),
-                    CircularButton(
-                      textAction: "Cambiar foto",
-                      iconData: Icons.camera_alt,
-                      bgColor: Colors.orange,
-                      action: () {
-                        BlocProvider.of<PictureBloc>(context)
-                            .add(ChangeImageEvent());
-                      },
+                    DescribedFeatureOverlay(
+                      title: Text("Elige una foto cool"),
+                      featureId: 'Cambiar foto ID',
+                      overflowMode: OverflowMode.extendBackground,
+                      tapTarget: Icon(Icons.camera_alt),
+                      child: CircularButton(
+                        textAction: "Cambiar foto",
+                        iconData: Icons.camera_alt,
+                        bgColor: Colors.orange,
+                        action: () {
+                          BlocProvider.of<PictureBloc>(context)
+                              .add(ChangeImageEvent());
+                        },
+                      ),
                     ),
                     CircularButton(
                       textAction: "Ver tutorial",
                       iconData: Icons.play_arrow,
                       bgColor: Colors.green,
-                      action: null,
+                      action: () {
+                        FeatureDiscovery.discoverFeatures(
+                          context,
+                          const <String>{
+                            'Ver tarjeta ID',
+                            'Cambiar foto ID',
+                            'Share ID',
+                          },
+                        );
+                        FeatureDiscovery.clearPreferences(context, <String>{
+                          'Ver tarjeta ID',
+                          'Cambiar foto ID',
+                          'Share ID',
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -172,7 +203,7 @@ class _ProfileState extends State<Profile> {
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         SnackBar(
-                          content: Text("Éxito al obtener la informarción"),
+                          content: Text("Éxito al obtener la información"),
                         ),
                       );
                   }
@@ -187,7 +218,7 @@ class _ProfileState extends State<Profile> {
 
   Column getCuentas(SuccessRequestState state) {
     List<CuentaItem> cuentas = [];
-    for (var cuenta in state.data["cuentas"]) {
+    for (var cuenta in state.data["hoja1"]) {
       cuentas.add(
         CuentaItem(
           saldoDisponible: "${cuenta["dinero"]}",
