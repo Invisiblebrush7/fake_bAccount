@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_track/user_page/bloc/picture_bloc.dart';
+import 'package:money_track/user_page/bloc/request_bloc.dart';
 
 import 'user_page/profile.dart';
 
@@ -11,7 +14,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: Profile(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<PictureBloc>(
+            create: (BuildContext context) => PictureBloc(),
+          ),
+          BlocProvider<RequestBloc>(
+            create: (BuildContext context) => RequestBloc(),
+          ),
+        ],
+        child: Profile(),
+      ),
     );
   }
 }

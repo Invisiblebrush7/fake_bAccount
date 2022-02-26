@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>I need your photos to blackmail you</string>
+	<key>NSCameraUsageDescription</key>
+	<string>I need your photos to blackmail you</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>I need your videos to blackmail you</string>
 	<key>CFBundleDisplayName</key>
 	<string>Money Track</string>
 	<key>CFBundleExecutable</key>

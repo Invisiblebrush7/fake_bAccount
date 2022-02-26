@@ -5,18 +5,19 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: '>=2.16.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  http: ^0.13.4
   flutter_bloc:
   equatable:
   local_auth:
   flutter_credit_card:
   image_picker:
-  share:
+  share_plus: ^3.1.0
   screenshot:
   path_provider:
 
